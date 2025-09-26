@@ -11,6 +11,7 @@
 - Document your code with comments and an entry/entries in the `docs/` folder
   - doc files are either `.md`, single doc file for each src file, `doc/` directory structure should mirror `src/` (so `src/tui/tui.rs` will have a doc file in `docs/tui/` called `tui.md`)
 - Remove excessive trailing newlines or whitespace (so like reduce those 5 empty lines you had separating two sections of code to a single line)
+- Unix-style line endings (`LF`), NO CRLF, I will blow you up if I see `^M` when I review your PR (/j)
 
 # TODO:
 - [ ] RFC 1459
