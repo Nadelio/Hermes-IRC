@@ -1,41 +1,79 @@
 use std::io::{self, Write};
 
+const ANSI: &str = "\u{1b}["; // ansi escape code
 const RESET: &str = "\u{1b}[0m";
-const NORMAL: &str = "\u{1b}[36m";
-const QUIT: &str = "\u{1b}[33m";
-const PING: &str = "\u{1b}[35m";
+const NORMAL: &str = "\u{1b}[36m"; // cyan
+const SYSTEM: &str = "\u{1b}[33m"; // yellow
+const PING: &str = "\u{1b}[35m"; // magenta/pink
+const CHANNEL: &str = "\u{1b}[94;47m"; // bright blue
+const ERROR: &str = "\u{1b}[31m"; // red
 
-fn parse_input(input: &str) -> bool {
+trait ToU8Vec {
+	fn to_byte_vec(&self) -> Vec<u8>;
+}
+
+impl ToU8Vec for Vec<String> {
+	fn to_byte_vec(&self) -> Vec<u8> {
+		let mut vu8: Vec<u8> = Vec::new();
+		for elem in self {
+			vu8.extend_from_slice(elem.as_bytes());
+		}
+		vu8
+	}
+}
+
+fn parse_input(input: &str) -> (String, bool) {
 	if input.to_lowercase().trim() == "quit" || input.to_lowercase().trim() == "q" {
-		print!("$ {QUIT}[Client] Closing Client...{RESET}");
-		return true;
+		return (format!("$ {SYSTEM}[Client] Closing Client...{RESET}"), true);
 	}
 
-	let at_sign = input.find('@');
-	if let Some(at) = at_sign {
-		let whitespace = input[at..]
-			.find(|c: char| c.is_ascii_whitespace())
-			.unwrap_or(input.len() - at)
-			+ at;
-		let split1 = &input[..at];
-		let ping = &input[at..whitespace];
-		let split2 = &input[whitespace..];
+	let parts: Vec<String> = input
+		.split_whitespace()
+		.map(|part| {
+			let mut part_str = part.to_string();
+			if part_str.starts_with('@') {
+				part_str.insert_str(0, PING);
+			} else if part_str.starts_with('#') {
+				part_str.insert_str(0, CHANNEL);
+			} else if part_str.starts_with('!') {
+				part_str.insert_str(0, ERROR);
+			} else {
+				part_str.insert_str(0, NORMAL);
+			}
 
-		print!("$ {NORMAL}{split1}{PING}{ping}{NORMAL}{split2}{RESET}");
-	} else {
-		print!("$ {NORMAL}{input}{RESET}");
-	}
+			part_str.push_str(RESET);
+			part_str
+		})
+		.collect();
 
-	false
+	let highlighted = parts.join(" ");
+
+	(format!("$ {highlighted}\n"), false)
+}
+
+fn clear_term_screen() {
+	print!("{esc}[2J{esc}[H", esc = 27 as char);
 }
 
 fn main() {
+	let mut output_buffer: Vec<String> = Vec::new();
 	loop {
-		print!("> ");
+		clear_term_screen();
+		// create user prompt section
+		print!("> {ANSI}B\r");
+		// write out message history
+		let buf = &output_buffer.to_byte_vec();
+		io::stdout().write_all(buf).unwrap();
 		io::stdout().flush().unwrap();
+		// move back to user prompt section
+		print!("{ANSI}H{ANSI}2C");
+		// get user prompt
 		let mut input = String::new();
 		io::stdin().read_line(&mut input).unwrap();
-		if parse_input(&input) {
+		let result = parse_input(&input);
+		output_buffer.push(result.0);
+		//TODO: quit cmd (doesn't print quitting message, need to do that!)
+		if result.1 {
 			break;
 		}
 	}
