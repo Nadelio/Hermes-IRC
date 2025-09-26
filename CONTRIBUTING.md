@@ -8,9 +8,9 @@
 - Issues for bugs, Discussions for features
 - Limit the dependency chain as much as possible (so don't add 50 deps in a single PR, theoretically, we only really should have a couple crates as dependencies for stuff like concurrency and networking)
 - Absolutely no AI
-- Document your code with comments or entries in the `docs/` folder
+- Document your code with comments and an entry/entries in the `docs/` folder
   - doc files are either `.md`, single doc file for each src file, `doc/` directory structure should mirror `src/` (so `src/tui/tui.rs` will have a doc file in `docs/tui/` called `tui.md`)
-- Remove ecessive trailing newlines or whitespace (so like reduce those 5 empty lines you had separating two sections of code to a single line)
+- Remove excessive trailing newlines or whitespace (so like reduce those 5 empty lines you had separating two sections of code to a single line)
 
 # TODO:
 - [ ] RFC 1459
