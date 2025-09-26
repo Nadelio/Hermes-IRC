@@ -60,7 +60,7 @@ fn main() {
 	loop {
 		clear_term_screen();
 		// create user prompt section
-		print!("> {ANSI}B\r");
+		println!("> ");
 		// write out message history
 		let buf = &output_buffer.to_byte_vec();
 		io::stdout().write_all(buf).unwrap();
