@@ -31,14 +31,12 @@ fn parse_input(input: &str) -> (String, bool) {
 		.split_whitespace()
 		.map(|part| {
 			let mut part_str = part.to_string();
-			if part_str.starts_with('@') {
-				part_str.insert_str(0, PING);
-			} else if part_str.starts_with('#') {
-				part_str.insert_str(0, CHANNEL);
-			} else if part_str.starts_with('!') {
-				part_str.insert_str(0, ERROR);
-			} else {
-				part_str.insert_str(0, NORMAL);
+
+			match part_str.chars().next().unwrap() {
+				'@' => part_str.insert_str(0, PING),
+				'#' => part_str.insert_str(0, CHANNEL),
+				'!' => part_str.insert_str(0, ERROR),
+				_ => part_str.insert_str(0, NORMAL),
 			}
 
 			part_str.push_str(RESET);
