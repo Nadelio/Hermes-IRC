@@ -8,6 +8,7 @@ const PING: &str = "\u{1b}[35m"; // magenta/pink
 const CHANNEL: &str = "\u{1b}[94;47m"; // bright blue
 const ERROR: &str = "\u{1b}[31m"; // red
 
+// TODO: move trait and impl code to utils.rs
 trait ToU8Vec {
 	fn to_byte_vec(&self) -> Vec<u8>;
 }
@@ -22,6 +23,7 @@ impl ToU8Vec for Vec<String> {
 	}
 }
 
+// TODO: Move to src/tui/tui.rs
 fn parse_input(input: &str) -> (String, bool) {
 	if input.to_lowercase().trim() == "quit" || input.to_lowercase().trim() == "q" {
 		return (format!("$ {SYSTEM}[Client] Closing Client...{RESET}"), true);
@@ -31,14 +33,12 @@ fn parse_input(input: &str) -> (String, bool) {
 		.split_whitespace()
 		.map(|part| {
 			let mut part_str = part.to_string();
-			if part_str.starts_with('@') {
-				part_str.insert_str(0, PING);
-			} else if part_str.starts_with('#') {
-				part_str.insert_str(0, CHANNEL);
-			} else if part_str.starts_with('!') {
-				part_str.insert_str(0, ERROR);
-			} else {
-				part_str.insert_str(0, NORMAL);
+
+			match part_str.chars().next().unwrap() {
+				'@' => part_str.insert_str(0, PING),
+				'#' => part_str.insert_str(0, CHANNEL),
+				'!' => part_str.insert_str(0, ERROR),
+				_ => part_str.insert_str(0, NORMAL),
 			}
 
 			part_str.push_str(RESET);
@@ -51,6 +51,7 @@ fn parse_input(input: &str) -> (String, bool) {
 	(format!("$ {highlighted}\n"), false)
 }
 
+// TODO: Move to src/tui/tui.rs
 fn clear_term_screen() {
 	print!("{esc}[2J{esc}[H", esc = 27 as char);
 }
@@ -58,6 +59,7 @@ fn clear_term_screen() {
 fn main() {
 	let mut output_buffer: Vec<String> = Vec::new();
 	loop {
+		// TODO: Move tui code to src/tui/tui.rs
 		clear_term_screen();
 		// create user prompt section
 		println!("> ");
