@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-pub mod tui;
+mod tui;
 
 // TODO: move trait and impl code to utils.rs
 trait ToU8Vec {
