@@ -1,6 +1,6 @@
+use crate::tui::tui::{clear_term_screen, parse_input, ANSI};
 use std::io::{self, Write};
-
-mod tui;
+pub mod tui;
 
 // TODO: move trait and impl code to utils.rs
 trait ToU8Vec {

@@ -1,5 +1,3 @@
-use crate::tui::tui;
-
 pub const ANSI: &str = "\u{1b}["; // ansi escape code
 const RESET: &str = "\u{1b}[0m";
 const NORMAL: &str = "\u{1b}[36m"; // cyan
