@@ -23,6 +23,7 @@
   - [ ] IRC Server Protocol
 - [ ] GUI (OpenGL or Vulkan?)
 - [ ] TUI (Ratatui)
+  - [ ] Add function for quickly sending CLIENT/SERVER info messages for debugging or otherwise to the message output buffer
   - [X] Client side syntax highlighting
   - [ ] Message box frame
   - [ ] Channel box frame
