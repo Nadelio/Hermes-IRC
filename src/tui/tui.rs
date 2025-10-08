@@ -6,7 +6,7 @@ const NORMAL: &str = "\u{1b}[36m"; // cyan
 pub const SYSTEM: &str = "\u{1b}[33m"; // yellow
 const PING: &str = "\u{1b}[35m"; // magenta/pink
 const CHANNEL: &str = "\u{1b}[30;47m"; // bright blue
-const ERROR: &str = "\u{1b}[31m"; // red
+pub const ERROR: &str = "\u{1b}[31m"; // red
 
 fn parse_cmd(cmd: &str) -> bool {
 	if cmd[1..] == *"CLEAR" {
