@@ -5,8 +5,9 @@ pub const RESET: &str = "\u{1b}[0m";
 const NORMAL: &str = "\u{1b}[36m"; // cyan
 pub const SYSTEM: &str = "\u{1b}[33m"; // yellow
 const PING: &str = "\u{1b}[35m"; // magenta/pink
-const CHANNEL: &str = "\u{1b}[30;47m"; // bright blue
+const CHANNEL: &str = "\u{1b}[30;47m"; // bright blue background with white foreground
 pub const ERROR: &str = "\u{1b}[31m"; // red
+const CODE: &str = "\u{1b}[97;100m"; // gray background with white foreground
 
 fn parse_cmd(cmd: &str) -> bool {
 	if cmd[1..] == *"CLEAR" {
@@ -36,6 +37,7 @@ pub fn parse_input(input: &str) -> (String, bool, bool) {
 				'#' => part_str.insert_str(0, CHANNEL),
 				'!' => part_str.insert_str(0, ERROR),
 				'/' => should_clear_buf = parse_cmd(&part_str.clone()),
+				'`' => part_str.insert_str(0, CODE),
 				_ => part_str.insert_str(0, NORMAL),
 			}
 
@@ -43,6 +45,8 @@ pub fn parse_input(input: &str) -> (String, bool, bool) {
 			part_str
 		})
 		.collect();
+
+	// need to add code parsing ``
 
 	let highlighted = parts.join(" ");
 
